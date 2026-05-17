@@ -8,27 +8,6 @@ from io import BytesIO
 from PIL import Image
 import random
 
-"""
-================================================================================
-                        财伴AI 演示系统 - 使用说明
-================================================================================
-
-【重要】请不要在 Jupyter Notebook 里直接运行这个文件！
-
-正确运行方式：
-1. 保存这个文件为 `app.py`
-2. 在终端运行：
-   streamlit run app.py
-
-3. 浏览器会自动打开演示页面
-
-如果想在云端部署（推荐用于比赛）：
-- 上传到 https://share.streamlit.io
-- 部署后复制链接，生成二维码即可
-
-================================================================================
-"""
-
 # ==================== 配置 ====================
 st.set_page_config(
     page_title="财伴AI · 大学生理财陪伴",
@@ -423,29 +402,10 @@ st.markdown("""
 
 ---
 
-### 如何使用（超级简单）
+### How to run this demo
 
-1. **保存为文件**
-   ```bash
-   nano 财伴AI_演示系统.py
-   ```
-   把上面代码全部粘贴进去并保存。
-
-2. **安装依赖**
-   ```bash
-   pip install streamlit requests qrcode pillow
-   ```
-
-3. **运行**
-   ```bash
-   streamlit run 财伴AI_演示系统.py
-   ```
-
-4. **部署 + 生成二维码**
-   - 上传到 [share.streamlit.io](https://share.streamlit.io)
-   - 部署成功后复制链接
-   - 扫码即可体验
-
-这个版本已经非常**好看、专业、有质感**，完全可以直接用于比赛演示！
+1. Save as `app.py`
+2. Run: `streamlit run app.py`
+3. Deploy to Streamlit Cloud for public URL + QR code
 
 需要我再帮你加**更多动画**或**真实机票API对接代码**吗？随时说。
