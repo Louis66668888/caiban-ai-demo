@@ -407,5 +407,3 @@ st.markdown("""
 1. Save as `app.py`
 2. Run: `streamlit run app.py`
 3. Deploy to Streamlit Cloud for public URL + QR code
-
-需要我再帮你加**更多动画**或**真实机票API对接代码**吗？随时说。
