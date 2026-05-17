@@ -113,17 +113,10 @@ with tab4:
     c2.metric("连续记账", "19天")
     c3.metric("本月储蓄率", "42%")
 
-# 底部
+# ==================== 底部下载区（国内推荐） ====================
 st.divider()
-st.markdown("### 📱 扫码体验完整版")
-if st.button("生成体验二维码", use_container_width=True):
-    url = "https://caiban-ai-cmb.streamlit.app"
-    qr = qrcode.QRCode(box_size=14, border=2)
-    qr.add_data(url)
-    qr.make(fit=True)
-    img = qr.make_image(fill_color="#0F172A", back_color="white")
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    st.image(buf.getvalue(), width=220)
+
+st.markdown("### 📥 下载财伴AI招商银行APP")
+
 
 st.caption("招商银行 × 财伴AI · 2026 · 仅供演示")
