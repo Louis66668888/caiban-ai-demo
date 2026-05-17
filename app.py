@@ -5,16 +5,16 @@ from io import BytesIO
 
 st.set_page_config(page_title="财伴AI · 招商银行", page_icon="💎", layout="wide")
 
-# 明亮活泼 + 高对比度
 st.markdown("""
 <style>
     .stApp { background: linear-gradient(180deg, #F0F9FF 0%, #E0F2FE 100%); color: #0F172A; }
     .section-title { font-size: 1.45rem; font-weight: 900; color: #0F172A; margin-bottom: 1rem; border-bottom: 3px solid #06B6D4; padding-bottom: 8px; }
-    .stButton>button { background: linear-gradient(90deg, #06B6D4, #F59E0B); color: white; border: none; border-radius: 9999px; padding: 0.75rem 2.2rem; font-weight: 800; font-size: 1.08rem; }
-    .stButton>button:hover { transform: translateY(-3px); box-shadow: 0 15px 20px -5px rgb(245 158 11 / 0.3); }
+    .stButton>button { background: linear-gradient(90deg, #06B6D4, #F59E0B); color: white; border: none; border-radius: 9999px; padding: 0.8rem 2.2rem; font-weight: 800; font-size: 1.1rem; }
+    .stButton>button:hover { transform: translateY(-3px); }
     .card { background: white; border-radius: 16px; padding: 1.4rem; box-shadow: 0 8px 12px -2px rgb(0 0 0 / 0.1); border: 1px solid #E2E8F0; }
     .metric { font-size: 2rem; font-weight: 900; color: #0EA5E9; }
-    .highlight { color: #F59E0B; font-weight: 800; }
+    .chat-bubble { background: #1E40AF; color: white; padding: 1rem 1.3rem; border-radius: 18px; margin: 8px 0; }
+    .ai-bubble { background: #334155; color: #F8FAFC; }
 </style>
 """, unsafe_allow_html=True)
 
@@ -34,16 +34,14 @@ st.markdown("""
 
 st.markdown("## 大学生理财陪伴智能体 · 招商银行专属版")
 
-# 正确顺序：消费记账 → 愿望共创器 → 投研推荐 → 成长树
 tab1, tab2, tab3, tab4 = st.tabs(["📝 消费记账", "🌟 愿望共创器", "📈 投研推荐", "🌳 成长树"])
 
-# ==================== Tab 1: 消费记账（入口） ====================
+# ==================== Tab 1: 消费记账 ====================
 with tab1:
     st.markdown('<div class="section-title">📝 消费记账 · 发现你的闲钱</div>', unsafe_allow_html=True)
-    st.caption("先记账 → 发现自己有闲钱 → 再去理财定目标")
+    st.caption("先记账 → 发现闲钱 → 再去理财")
     
     col1, col2 = st.columns([1, 1.3])
-    
     with col1:
         st.markdown("**快速记账**")
         amount = st.number_input("金额（元）", min_value=1.0, value=38.5, step=0.5)
@@ -51,52 +49,54 @@ with tab1:
         note = st.text_input("备注", placeholder="食堂 + 奶茶")
         
         if st.button("✅ 记账并同步招商银行一卡通", type="primary", use_container_width=True):
-            if "records" not in st.session_state:
-                st.session_state.records = []
-            st.session_state.records.append({"amount": amount, "category": category, "note": note})
             st.success(f"已记 ¥{amount}，本月闲钱增加 ¥{amount}！")
     
     with col2:
         st.markdown("**本月消费明细**（招商银行同步）")
-        if "records" in st.session_state and st.session_state.records:
-            total = sum(r["amount"] for r in st.session_state.records)
-            st.markdown(f"<div style='font-size:1.1rem; font-weight:700; color:#0EA5E9; margin-bottom:8px;'>本月已花 ¥{total}</div>", unsafe_allow_html=True)
-            for r in st.session_state.records[-4:]:
-                st.markdown(f"<div style='display:flex; justify-content:space-between; padding:4px 0; border-bottom:1px solid #E2E8F0;'><span>{r['category']} · {r['note']}</span><span style='color:#EF4444; font-weight:700;'>-¥{r['amount']}</span></div>", unsafe_allow_html=True)
-        else:
-            st.info("还没有记账记录，试试上面快速记账")
+        st.markdown("""
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #E2E8F0;">
+                <span>餐饮 · 食堂+奶茶</span><span style="color:#EF4444; font-weight:700;">-¥38.5</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0; border-bottom:1px solid #E2E8F0;">
+                <span>交通 · 地铁</span><span style="color:#EF4444; font-weight:700;">-¥12</span>
+            </div>
+            <div style="display:flex; justify-content:space-between; padding:6px 0;">
+                <span>学习 · 打印</span><span style="color:#EF4444; font-weight:700;">-¥8</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
-# ==================== Tab 2: 愿望共创器 ====================
+# ==================== Tab 2: 愿望共创器（对话形式） ====================
 with tab2:
-    st.markdown('<div class="section-title">✨ 愿望共创器 + 实时价格查询</div>', unsafe_allow_html=True)
-    st.caption("发现有闲钱后 → 设定旅行/目标基金")
+    st.markdown('<div class="section-title">🌟 愿望共创器（AI-Native）</div>', unsafe_allow_html=True)
+    st.caption("从你的聊天中发现真实愿望 → 主动提出制定计划")
     
-    col1, col2 = st.columns([1.1, 1])
-    with col1:
-        dest = st.selectbox("目的地", ["云南昆明", "云南大理", "云南丽江", "四川成都", "海南三亚"])
-        if st.button("🚀 实时查询 + 生成目标", type="primary", use_container_width=True):
-            with st.spinner("招商银行合作平台实时查询中..."):
-                time.sleep(0.6)
-                totals = {"云南昆明": 2200, "云南大理": 2450, "云南丽江": 2680, "四川成都": 1980, "海南三亚": 3120}
-                st.session_state.goal = {"name": f"{dest}旅行基金", "target": totals[dest], "monthly": 320}
-                st.success("✅ 目标已生成！")
+    # 模拟聊天
+    st.markdown("""
+    <div class="chat-bubble" style="background:#1E40AF; color:white; padding:1rem 1.3rem; border-radius:18px; margin:8px 0;">
+        <b>你：</b>最近好想去云南玩，但是生活费不够，感觉好遥远...
+    </div>
+    """, unsafe_allow_html=True)
     
-    with col2:
-        if "goal" in st.session_state:
-            g = st.session_state.goal
-            st.markdown(f"""
-            <div class="card">
-                <div style="font-size:1.35rem; font-weight:900; margin-bottom:12px;">{g['name']}</div>
-                <div style="display:flex; justify-content:space-between; align-items:end;">
-                    <div><div style="font-size:12px; color:#64748B;">目标金额</div><div class="metric">¥{g['target']}</div></div>
-                    <div style="text-align:right;"><div style="font-size:12px; color:#64748B;">每月定投</div><div style="font-size:1.7rem; font-weight:900; color:#F59E0B;">¥{g['monthly']}</div></div>
-                </div>
-                <div style="margin:14px 0; height:9px; background:#E2E8F0; border-radius:9999px; overflow:hidden;">
-                    <div style="width:34%; height:100%; background:linear-gradient(90deg,#06B6D4,#F59E0B);"></div>
-                </div>
-                <div style="font-size:13px; color:#64748B;">已完成 34% · 预计6个月达成</div>
+    if st.button("🚀 AI分析 + 主动提出计划", type="primary", use_container_width=True):
+        with st.spinner("正在理解你的愿望..."):
+            time.sleep(0.7)
+            
+            st.markdown("""
+            <div class="chat-bubble ai-bubble" style="background:#334155; color:#F8FAFC; padding:1rem 1.3rem; border-radius:18px; margin:8px 0;">
+                <b>财伴AI：</b>我听出来了！你心里一直有个「云南旅行」的愿望，对吧？<br><br>
+                我从你最近的聊天中发现你可能想去云南，需要我们一起制定一个「云南旅行基金」计划吗？<br><br>
+                <b>推荐方案：</b><br>
+                • 每月存 <b>320元</b> × 6个月 = ¥1920（够来回机票+部分住宿）<br>
+                • 或者你想更快/更慢？也可以自己改目标名和金额<br><br>
+                要现在开始吗？我会帮你每周自动追踪进度～
             </div>
             """, unsafe_allow_html=True)
+            
+            if st.button("✅ 是的，创建云南旅行基金", use_container_width=True):
+                st.session_state.goal = {"name": "云南旅行基金", "target": 1920, "monthly": 320}
+                st.success("✅ 目标已创建！已加入你的成长树")
 
 # ==================== Tab 3: 投研推荐 ====================
 with tab3:
@@ -136,9 +136,8 @@ with tab4:
     st.markdown('<div class="section-title">🌳 我的财务健康树 · 招商银行专属</div>', unsafe_allow_html=True)
     progress = st.slider("当前进度", 0, 100, 34, step=2)
     st.progress(progress / 100)
-    
     c1, c2, c3 = st.columns(3)
-    c1.metric("已存金额", f"¥{int(2200*progress/100)}", f"+{int(2200*progress/100*0.08)}")
+    c1.metric("已存金额", f"¥{int(1920*progress/100)}", f"+{int(1920*progress/100*0.08)}")
     c2.metric("连续记账", "19天", "新高")
     c3.metric("本月储蓄率", "42%", "+8%")
 
