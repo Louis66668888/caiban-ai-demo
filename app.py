@@ -398,12 +398,3 @@ st.markdown("""
     财伴AI · 2026 · 仅供演示 · 真实部署需配置完整API Key
 </div>
 """, unsafe_allow_html=True)
-``` 
-
----
-
-### How to run this demo
-
-1. Save as `app.py`
-2. Run: `streamlit run app.py`
-3. Deploy to Streamlit Cloud for public URL + QR code
